@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dijkstra's Algorithm Pathfinder</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center p-6 min-h-screen">
+
+  <div class="mb-6 w-full max-w-2xl">
+    <h1 class="text-3xl font-bold text-center mb-4 text-gray-800">Dijkstra's Algorithm Pathfinder</h1>
+
+    <div class="flex flex-wrap gap-4 justify-center mb-4">
+      <button id="start-button" class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Start Algorithm</span>
+      </button>
+      <button id="clear-button" class="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square"><rect width="18" height="18" x="3" y="3" rx="2"/></svg>
+        <span>Clear Path</span>
+      </button>
+      <button id="reset-button" class="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9 9 9.75 9.75 0 0 0-1.89-3.33L3 12Z"/><path d="M12 21V12.75"/></svg>
+        <span>Reset Grid</span>
+      </button>
+    </div>
+
+    <div class="flex gap-2 justify-center mb-4">
+      <button id="wall-mode" class="px-3 py-1 rounded-lg text-sm shadow-sm transition-colors bg-gray-800 text-white">
+        Draw Walls
+      </button>
+      <button id="start-mode" class="flex items-center gap-1 px-3 py-1 rounded-lg text-sm shadow-sm transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M14.5 11.5a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z"/><path d="M18.84 10.15a.5.5 0 0 1 .15.65c-1.4 2.8-5.3 6.95-8.84 9.1c-1.25.75-2.75.75-4 0C5.16 17.75 1.26 13.6 2.66 10.8a.5.5 0 0 1 .15-.65c2.35-1.4 5.3-2.15 8.2-2.15c2.9 0 5.85.75 8.2 2.15a.5.5 0 0 1 .15.65z"/></svg>
+        Set Start
+      </button>
+      <button id="end-mode" class="flex items-center gap-1 px-3 py-1 rounded-lg text-sm shadow-sm transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Set End
+      </button>
+    </div>
+
+    <div class="flex flex-wrap gap-6 justify-center text-sm mb-4">
+      <div id="stats-visited" class="p-2 bg-gray-100 rounded-lg shadow-inner">Nodes Visited: <span id="visited-count" class="font-bold text-gray-700">0</span></div>
+      <div id="stats-path" class="p-2 bg-gray-100 rounded-lg shadow-inner">Path Length: <span id="path-length" class="font-bold text-gray-700">0</span></div>
+      <div id="stats-distance" class="p-2 bg-gray-100 rounded-lg shadow-inner">Total Distance: <span id="total-distance" class="font-bold text-gray-700">0</span></div>
+    </div>
+  </div>
+
+  <div id="grid-container" class="grid-container"></div>
+
+  <div class="mt-6 flex flex-wrap gap-4 text-sm justify-center">
+    <div class="flex items-center gap-2">
+      <div class="w-4 h-4 bg-green-500 border rounded-full"></div>
+      <span>Start</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-4 h-4 bg-red-500 border rounded-full"></div>
+      <span>End</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-4 h-4 bg-gray-800 border rounded-lg"></div>
+      <span>Wall</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-4 h-4 bg-blue-300 border rounded-lg"></div>
+      <span>Visited</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-4 h-4 bg-yellow-400 border rounded-lg"></div>
+      <span>Shortest Path</span>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center text-sm text-gray-600 max-w-2xl">
+    <p class="mb-2">
+      Click and drag to draw walls, or use the mode buttons to set start/end points.
+      Click "Start Algorithm" to watch Dijkstra's algorithm find the shortest path!
+    </p>
+    <p>
+      The algorithm guarantees finding the shortest path between start and end nodes.
+      Blue cells show the exploration process, and yellow shows the final shortest path.
+    </p>
+  </div>
+
+  <div class="mt-8 w-full max-w-2xl">
+    <h2 class="text-xl font-bold text-gray-800 mb-2">Algorithm Console Output</h2>
+    <div id="console-output" class="bg-gray-900 text-green-400 text-xs p-4 rounded-lg shadow-inner h-64 overflow-y-scroll space-y-1">
+      </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
